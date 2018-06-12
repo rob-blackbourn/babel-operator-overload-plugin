@@ -1,0 +1,35 @@
+{
+  "name": "babel-operator-overload-plugin",
+  "version": "1.0.0",
+  "description": "A babel plugin for operator overloading",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node examples/bin/dev",
+    "start-prod": "npm run build && node examples/bin/prod",
+    "build": "babel examples/src --source-maps --out-dir examples/dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rob-blackbourn/babel-operator-overload-plugin.git"
+  },
+  "keywords": [
+    "babel",
+    "operator",
+    "overload",
+    "overloading"
+  ],
+  "author": "Rob Blackbourn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rob-blackbourn/babel-operator-overload-plugin/issues"
+  },
+  "homepage": "https://github.com/rob-blackbourn/babel-operator-overload-plugin#readme",
+  "dependencies": {
+    "operator-overload-polyfills": "https://github.com/rob-blackbourn/operator-overload-polyfills.git"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  }
+}
