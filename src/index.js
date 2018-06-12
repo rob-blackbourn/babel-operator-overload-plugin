@@ -11,7 +11,6 @@ module.exports = function({ types: t }) {
         visitor: {
 
             Program(path) {
-                console.log("Program")
                 path.unshiftContainer('body', t.importDeclaration([], t.stringLiteral('operator-overload-polyfills')))
             },
 
@@ -22,8 +21,6 @@ module.exports = function({ types: t }) {
                 if (!functionName) {
                     return
                 }
-
-                console.log("BinaryExpression")
 
                 path.replaceWith(
                     t.callExpression(
