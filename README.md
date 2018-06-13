@@ -2,7 +2,13 @@
 
 A Babel plugin for operator overloading.
 
-Warning: This is the first babel plugin I have written, so your mileage may vary.
+## Warning
+
+This is the first babel plugin I have written, so your mileage may vary.
+
+## Help
+
+I would appreciate any help!
 
 ## Usage
 
@@ -18,7 +24,7 @@ Warning: This is the first babel plugin I have written, so your mileage may vary
 ```
 3. Install the operator overload plugin:
 ```bash
-    ~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git
+~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git
 ```
 4. Create a `.babelrc` file:
 ```bash
