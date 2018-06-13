@@ -50,7 +50,7 @@ I would appreciate any help!
 ```
 3. Install the operator overload plugin:
 ```bash
-~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git
+~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#1.0.0
 ```
 4. Create a `.babelrc` file:
 ```bash
