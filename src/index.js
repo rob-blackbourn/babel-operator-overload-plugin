@@ -69,8 +69,6 @@ module.exports = function({ types: t }) {
             Program: {
                 enter(path, state) {
 
-                    console.log("program:opts", state.opts)
-
                     if (!state.dynamicData.hasOwnProperty(OperatorOverloadDirectiveName)) {
                         state.dynamicData[OperatorOverloadDirectiveName] = {
                             directives: []
@@ -92,9 +90,6 @@ module.exports = function({ types: t }) {
                     if (state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
                         path.unshiftContainer('body', t.importDeclaration([], t.stringLiteral('operator-overload-polyfills')))
                     }
-
-                    console.log("program:directives", state.dynamicData[OperatorOverloadDirectiveName].directives)
-
                 },
                 exit(path, state) {
                     if (hasOverloadingDirective(path.node.directives) !== false) {
@@ -133,8 +128,6 @@ module.exports = function({ types: t }) {
                 if (path.node.hasOwnProperty('_fromTemplate')) {
                     return
                 }
-
-                console.log("program:directives", state.dynamicData[OperatorOverloadDirectiveName].directives)
 
                 const factory = BinaryOperatorMap[path.node.operator]
                 if (!factory) {
