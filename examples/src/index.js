@@ -1,3 +1,5 @@
+'babel-operator-overload-plugin enabled'
+
 import Point from './point'
 
 const p1 = new Point(5, 5)

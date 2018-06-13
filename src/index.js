@@ -46,9 +46,6 @@ const UnaryOperatorMap = {
     '~': function(t, path) { return createCallableUnaryExpression(t, '__not__', path) },
 }
 
-const AssignmentOperatorMap = {
-}
-
 const OperatorOverloadDirectiveName = 'babel-operator-overload-plugin'
 
 function hasDirective(directives, name, values) {
@@ -72,20 +69,36 @@ module.exports = function({ types: t }) {
             Program: {
                 enter(path, state) {
 
+                    console.log("program:opts", state.opts)
+
                     if (!state.dynamicData.hasOwnProperty(OperatorOverloadDirectiveName)) {
                         state.dynamicData[OperatorOverloadDirectiveName] = {
-                            directiveCount: 0
+                            directives: []
                         }
                     }
 
-                    if (hasOverloadingDirective(path.node.directives) !== false) {
-                        ++state.dynamicData[OperatorOverloadDirectiveName].directiveCount
+                    switch (hasOverloadingDirective(path.node.directives)) {
+                        case true:
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(true)
+                            break;
+                        case false:
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(false)
+                            break;
+                        default:
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(state.opts.enabled == undefined ? true : false)
+                            break;
+                    }
+
+                    if (state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
                         path.unshiftContainer('body', t.importDeclaration([], t.stringLiteral('operator-overload-polyfills')))
                     }
+
+                    console.log("program:directives", state.dynamicData[OperatorOverloadDirectiveName].directives)
+
                 },
                 exit(path, state) {
                     if (hasOverloadingDirective(path.node.directives) !== false) {
-                        --state.dynamicData[OperatorOverloadDirectiveName].directiveCount
+                        state.dynamicData[OperatorOverloadDirectiveName].directives.shift()
                     }
                 }
             },
@@ -94,20 +107,18 @@ module.exports = function({ types: t }) {
                 enter(path, state) {
                     switch (hasOverloadingDirective(path.node.directives)) {
                         case true:
-                            ++state.dynamicData[OperatorOverloadDirectiveName].directiveCount
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(true)
                             break
                         case false:
-                            --state.dynamicData[OperatorOverloadDirectiveName].directiveCount
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(false)
                             break
                     }
                 },
                 exit(path, state) {
                     switch (hasOverloadingDirective(path.node.directives)) {
                         case true:
-                            --state.dynamicData[OperatorOverloadDirectiveName].directiveCount
-                            break
                         case false:
-                            ++state.dynamicData[OperatorOverloadDirectiveName].directiveCount
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.shift()
                             break
                     }
                 }
@@ -115,13 +126,15 @@ module.exports = function({ types: t }) {
 
             BinaryExpression(path, state) {
 
-                if (state.dynamicData[OperatorOverloadDirectiveName].directiveCount === 0) {
+                if (!state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
                     return
                 }
 
                 if (path.node.hasOwnProperty('_fromTemplate')) {
                     return
                 }
+
+                console.log("program:directives", state.dynamicData[OperatorOverloadDirectiveName].directives)
 
                 const factory = BinaryOperatorMap[path.node.operator]
                 if (!factory) {
@@ -133,7 +146,7 @@ module.exports = function({ types: t }) {
 
             UnaryExpression(path, state) {
 
-                if (state.dynamicData[OperatorOverloadDirectiveName].directiveCount === 0) {
+                if (!state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
                     return
                 }
 
@@ -151,7 +164,7 @@ module.exports = function({ types: t }) {
 
             AssignmentExpression(path, state) {
 
-                if (state.dynamicData[OperatorOverloadDirectiveName].directiveCount === 0) {
+                if (!state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
                     return
                 }
 

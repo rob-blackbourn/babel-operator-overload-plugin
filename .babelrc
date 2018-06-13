@@ -3,6 +3,6 @@
         "env"
     ],
     "plugins": [
-        "./src"
+        ["./src", { "enabled": false }]
     ]
 }
