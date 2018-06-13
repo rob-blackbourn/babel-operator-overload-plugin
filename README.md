@@ -28,42 +28,42 @@ I would appreciate any help!
 ```
 4. Create a `.babelrc` file:
 ```bash
-    ~/my-app$ cat > .babelrc
-    {
-        "presets": [
-            "env"
-        ],
-        "plugins": ["babel-operator-overload-plugin"]
-    }
-    ^D
+~/my-app$ cat > .babelrc
+{
+    "presets": [
+        "env"
+    ],
+    "plugins": ["babel-operator-overload-plugin"]
+}
+^D
 ```
 5. Write some code:
 ```bash
-    ~/my-app$ cat > index.js
-    class Point {
-  
-        constructor(x, y) {
-            this.x = x
-            this.y = y
-        }
-        
-        __add__(other) {
-            const x = this.x + other.x
-            const y = this.y + other.y
-            return new Point(x, y)
-        }
-    }
+~/my-app$ cat > index.js
+class Point {
 
-    const p1 = new Point(5, 5)
-    const p2 = new Point(2, 3)
-    const p3 = p1 + p2
-    console.log(p3)
-    ^D
+    constructor(x, y) {
+        this.x = x
+        this.y = y
+    }
+    
+    __add__(other) {
+        const x = this.x + other.x
+        const y = this.y + other.y
+        return new Point(x, y)
+    }
+}
+
+const p1 = new Point(5, 5)
+const p2 = new Point(2, 3)
+const p3 = p1 + p2
+console.log(p3)
+^D
 ```
 6. Run it with `babel-node`:
 ```bash
-    ~/my-app$ ./node_modules/.bin/babel-node.cmd index.js
-    Point { x: 7, y: 8 }
+~/my-app$ ./node_modules/.bin/babel-node.cmd index.js
+Point { x: 7, y: 8 }
 ```
 
 ## Description
