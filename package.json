@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/rob-blackbourn/babel-operator-overload-plugin#readme",
   "dependencies": {
-    "operator-overload-polyfills": "https://github.com/rob-blackbourn/operator-overload-polyfills.git"
+    "operator-overload-polyfills": "https://github.com/rob-blackbourn/operator-overload-polyfills.git#1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
