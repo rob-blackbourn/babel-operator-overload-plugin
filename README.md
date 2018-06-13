@@ -14,13 +14,13 @@ I would appreciate any help!
 
 1. Make a new folder and create a package.json file:
 ```bash
-    ~$ mkdir my-app
-    ~$ cd my-app
-    ~/my-app$ npm init -y
+~$ mkdir my-app
+~$ cd my-app
+~/my-app$ npm init -y
 ```
 2. Install babel and the basic plugin (also `babel-cli` for easier testing):
 ```bash
-    ~/my-app$ npm install --save-dev babel-core babel-preset-env babel-cli
+~/my-app$ npm install --save-dev babel-core babel-preset-env babel-cli
 ```
 3. Install the operator overload plugin:
 ```bash
