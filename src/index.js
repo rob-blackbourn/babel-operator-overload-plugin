@@ -83,7 +83,7 @@ module.exports = function({ types: t }) {
                             state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(false)
                             break;
                         default:
-                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(state.opts.enabled == undefined ? true : false)
+                            state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(state.opts.enabled == undefined ? true : state.opts.enabled)
                             break;
                     }
 
