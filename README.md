@@ -12,13 +12,13 @@ Warning: This is the first babel plugin I have written, so your mileage may vary
     ~$ cd my-app
     ~/my-app$ npm init -y
 ```
-2. Install babel and the basic plugin (also babel-cli for easier testing):
+2. Install babel and the basic plugin (also `babel-cli` for easier testing):
 ```bash
     ~/my-app$ npm install --save-dev babel-core babel-preset-env babel-cli
 ```
 3. Install the operator overload plugin:
 ```bash
-    ~/my-app$ npm install --save-dev babel-core babel-preset-env https://github.com/rob-blackbourn/babel-operator-overload-plugin.git
+    ~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git
 ```
 4. Create a `.babelrc` file:
 ```bash
@@ -54,7 +54,7 @@ Warning: This is the first babel plugin I have written, so your mileage may vary
     console.log(p3)
     ^D
 ```
-6. Run it:
+6. Run it with `babel-node`:
 ```bash
     ~/my-app$ ./node_modules/.bin/babel-node.cmd index.js
     Point { x: 7, y: 8 }
@@ -62,9 +62,9 @@ Warning: This is the first babel plugin I have written, so your mileage may vary
 
 ## Description
 
-The plugin uses the [operator-overload-polyfills](https://github.com/rob-blackbourn/operator-overload-polyfills|) package to redirect operators to functions on the root object.
+The plugin uses the [operator-overload-polyfills](https://github.com/rob-blackbourn/operator-overload-polyfills) package to redirect operators to functions on the root object.
 
-For example the folyfill for addition is:
+For example the polyfill for addition is:
 ```javascript
 if (!Object.prototype.__add__) {
   Object.prototype.__add__ = function (other) {
@@ -108,7 +108,7 @@ class Point {
 Operator overloading is enabled for all files by default. This means all operator calls will have an indirection step before the actual operation is invoked.
 
 This can be disabled globally in the `.babelrc`:
-```bash
+```json
     {
         "presets": [
             "env"
