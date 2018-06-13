@@ -135,6 +135,21 @@ class Point {
 }
 ```
 
+### Assigment operators
+
+Assignment operators re-write the code into an operation and an assignment.
+
+For example the following code:
+```javascript
+let a = 1
+a += 3
+```
+gets re-written as:
+```javascript
+let a = 1
+a = a.__add__(3)
+```
+
 ## Options
 
 Operator overloading is enabled for all files by default. This means all operator calls will have an indirection step before the actual operation is invoked.
