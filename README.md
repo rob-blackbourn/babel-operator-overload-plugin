@@ -30,11 +30,9 @@ produces the following output:
 Point { x: 7, y: 8 }
 ```
 
-## Warning
+## Status
 
 This is the first babel plugin I have written, so your mileage may vary.
-
-## Help
 
 I would appreciate any help!
 
