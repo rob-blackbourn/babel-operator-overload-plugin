@@ -26,7 +26,7 @@ const p3 = p1 + p2
 console.log(p3)
 ```
 produces the following output:
-```json
+```bash
 Point { x: 7, y: 8 }
 ```
 
@@ -44,7 +44,7 @@ I would appreciate any help!
 ~$ cd my-app
 ~/my-app$ npm init -y
 ```
-2. Install babel and the basic plugin (also `babel-cli` for easier testing):
+2. Install babel and the basic preset (also `babel-cli` for easier testing):
 ```bash
 ~/my-app$ npm install --save-dev babel-core babel-preset-env babel-cli
 ```
@@ -150,7 +150,7 @@ This can be disabled globally in the `.babelrc`:
         ]
     }
 ```
-and enabled selectively by including `'babel-operator-overload-plugin enabled'` at the start of a file or withing a block:
+and enabled selectively by including `'babel-operator-overload-plugin enabled'` at the start of a file or within a block:
 ```javascript
 'babel-operator-overload-plugin enabled'
 
@@ -170,6 +170,8 @@ class Point {
 ```
 
 ## Supported operations
+
+The following operators are supported
 
 ### Binary operators
 
