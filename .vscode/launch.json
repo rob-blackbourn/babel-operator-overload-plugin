@@ -8,20 +8,20 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\examples\\bin\\dev"
+            "program": "${workspaceFolder}/examples/bin/dev"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Example",
-            "program": "${workspaceFolder}\\examples\\dist\\index.js"
+            "program": "${workspaceFolder}/examples/dist/index.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Test",
             //"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
-            "program": "${workspaceFolder}\\test\\index.js"
+            "program": "${workspaceFolder}/test/index.js"
         }
     ]
 }

@@ -4,8 +4,13 @@ A Babel plugin for operator overloading.
 
 ## Example
 
-The code:
+The following code adds two integers and then two points.
+
+The directive at the start is required to enable the transformation.
+
 ```javascript
+'babel-operator-overload-plugin enabled'
+
 class Point {
 
     constructor(x, y) {
@@ -19,6 +24,11 @@ class Point {
         return new Point(x, y)
     }
 }
+
+const x1 = 2
+const x2 = 3
+const x3 = x1 + x2
+console.log(x3)
 
 const p1 = new Point(5, 5)
 const p2 = new Point(2, 3)
@@ -46,18 +56,18 @@ I would appreciate any help!
 ```
 2. Install babel and the basic preset (also `babel-cli` for easier testing):
 ```bash
-~/my-app$ npm install --save-dev babel-core babel-preset-env babel-cli
+~/my-app$ npm install --save-dev @babel/core @babel/preset-env @babel/cli
 ```
 3. Install the operator overload plugin:
 ```bash
-~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#1.0.0
+~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#2.0.0
 ```
 4. Create a `.babelrc` file:
 ```bash
 ~/my-app$ cat > .babelrc
 {
     "presets": [
-        "env"
+        "@babel/preset-env"
     ],
     "plugins": ["babel-operator-overload-plugin"]
 }

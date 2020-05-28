@@ -1,6 +1,31 @@
 'babel-operator-overload-plugin enabled'
 
-import Point from './point'
+class Point {
+  
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  __add__(other) {
+    const x = this.x + other.x
+    const y = this.y + other.y
+    return new Point(x, y)
+  }
+
+  __eq__(other) {
+    return this.x == other.x && this.y == other.y
+  }
+
+  toString() {
+    return `x=${this.x}, y=${this.y}`
+  }
+}
+
+const x = 1.2
+const y = 3.4
+const z = x + y
+console.log(z)
 
 const p1 = new Point(5, 5)
 const p2 = new Point(2, 3)
