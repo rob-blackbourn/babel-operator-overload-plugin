@@ -56,18 +56,18 @@ I would appreciate any help!
 ```
 2. Install babel and the basic preset (also `babel-cli` for easier testing):
 ```bash
-~/my-app$ npm install --save-dev babel-core babel-preset-env babel-cli
+~/my-app$ npm install --save-dev @babel/core @babel/preset-env @babel/cli
 ```
 3. Install the operator overload plugin:
 ```bash
-~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#1.0.0
+~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#2.0.0
 ```
 4. Create a `.babelrc` file:
 ```bash
 ~/my-app$ cat > .babelrc
 {
     "presets": [
-        "env"
+        "@babel/preset-env"
     ],
     "plugins": ["babel-operator-overload-plugin"]
 }
