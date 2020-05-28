@@ -2,6 +2,8 @@
 
 A Babel plugin for operator overloading.
 
+There is a trivial template project [here](https://github.com/rob-blackbourn/babel-operator-overload-plugin-example).
+
 ## Example
 
 The following code adds two integers and then two points.
@@ -45,6 +47,8 @@ Point { x: 7, y: 8 }
 This is the first babel plugin I have written, so your mileage may vary.
 
 I would appreciate any help!
+
+28-May2020: Updated to babel 7.
 
 ## Usage
 
