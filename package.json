@@ -1,6 +1,6 @@
 {
   "name": "babel-operator-overload-plugin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A babel plugin for operator overloading",
   "main": "src/index.js",
   "scripts": {
@@ -25,11 +25,11 @@
   },
   "homepage": "https://github.com/rob-blackbourn/babel-operator-overload-plugin#readme",
   "dependencies": {
+    "@babel/core": "^7.10.0",
     "operator-overload-polyfills": "https://github.com/rob-blackbourn/operator-overload-polyfills.git#1.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0"
+    "@babel/cli": "^7.10.0",
+    "@babel/preset-env": "^7.10.0"
   }
 }

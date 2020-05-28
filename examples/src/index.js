@@ -2,6 +2,11 @@
 
 import Point from './point'
 
+const x = 1.2
+const y = 3.4
+const z = x + y
+console.log(z)
+
 const p1 = new Point(5, 5)
 const p2 = new Point(2, 3)
 const p3 = p1 + p2

@@ -4,8 +4,13 @@ A Babel plugin for operator overloading.
 
 ## Example
 
-The code:
+The following code adds two integers and then two points.
+
+The directive at the start is required to enable the transformation.
+
 ```javascript
+'babel-operator-overload-plugin enabled'
+
 class Point {
 
     constructor(x, y) {
@@ -19,6 +24,11 @@ class Point {
         return new Point(x, y)
     }
 }
+
+const x1 = 2
+const x2 = 3
+const x3 = x1 + x2
+console.log(x3)
 
 const p1 = new Point(5, 5)
 const p2 = new Point(2, 3)
