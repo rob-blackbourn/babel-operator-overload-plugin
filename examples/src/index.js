@@ -2,7 +2,8 @@
 
 
 let j1 = 1
-j1 += 2
+++j
+console.log(j1)
 // console.log(++j1)
 // console.log(j1++)
 // console.log(+j1)

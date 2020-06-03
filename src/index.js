@@ -116,6 +116,10 @@ module.exports = function ({ types: t }) {
           return
         }
 
+        if (path.node.operator.endsWith('===')) {
+          return
+        }
+
         const expressionStatement = createBinaryTemplate(path.node.operator)({
           LEFT_ARG: path.scope.generateUidIdentifier("left"),
           RIGHT_ARG: path.scope.generateUidIdentifier("right"),
@@ -143,11 +147,17 @@ module.exports = function ({ types: t }) {
             ARG: path.scope.generateUidIdentifier("arg"),
         })
 
+        const callExpression = t.callExpression(
+          expressionStatement.expression,
+          [path.node.argument]
+        )
+
+
         path.replaceWith(
           t.assignmentExpression(
             '=',
             path.node.argument,
-            expressionStatement.expression))
+            callExpression))
       },
 
       UnaryExpression(path, state) {
