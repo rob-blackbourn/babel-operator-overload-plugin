@@ -19,198 +19,198 @@ x = y;`
       operation: 'x += y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("+")]) return _left[Symbol.for("+")](_right);else return _left + _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("+")] ? x[Symbol.for("+")](y) : x + y;
+})();`
     },
     {
       description: 'should transpile subtraction assignment',
       operation: 'x -= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("-")]) return _left[Symbol.for("-")](_right);else return _left - _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("-")] ? x[Symbol.for("-")](y) : x - y;
+})();`
     },
     {
       description: 'should transpile multiplication assignment',
       operation: 'x *= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("*")]) return _left[Symbol.for("*")](_right);else return _left * _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("*")] ? x[Symbol.for("*")](y) : x * y;
+})();`
     },
     {
       description: 'should transpile division assignment',
       operation: 'x /= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("/")]) return _left[Symbol.for("/")](_right);else return _left / _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("/")] ? x[Symbol.for("/")](y) : x / y;
+})();`
     },
     {
       description: 'should transpile remainder assignment',
       operation: 'x %= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("%")]) return _left[Symbol.for("%")](_right);else return _left % _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("%")] ? x[Symbol.for("%")](y) : x % y;
+})();`
     },
     {
       description: 'should transpile exponentation assignment',
       operation: 'x **= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("**")]) return _left[Symbol.for("**")](_right);else return _left ** _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("**")] ? x[Symbol.for("**")](y) : x ** y;
+})();`
     },
     {
       description: 'should transpile left shift assignment',
       operation: 'x <<= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("<<")]) return _left[Symbol.for("<<")](_right);else return _left << _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("<<")] ? x[Symbol.for("<<")](y) : x << y;
+})();`
     },
     {
       description: 'should transpile right shift assignment',
       operation: 'x >>= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for(">>")]) return _left[Symbol.for(">>")](_right);else return _left >> _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for(">>")] ? x[Symbol.for(">>")](y) : x >> y;
+})();`
     },
     {
       description: 'should transpile unsigned right shift assignment',
       operation: 'x >>>= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for(">>>")]) return _left[Symbol.for(">>>")](_right);else return _left >>> _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for(">>>")] ? x[Symbol.for(">>>")](y) : x >>> y;
+})();`
     },
     {
       description: 'should transpile unsigned bitwise and assignment',
       operation: 'x &= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("&")]) return _left[Symbol.for("&")](_right);else return _left & _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("&")] ? x[Symbol.for("&")](y) : x & y;
+})();`
     },
     {
       description: 'should transpile bitwise xor assignment',
       operation: 'x ^= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("^")]) return _left[Symbol.for("^")](_right);else return _left ^ _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("^")] ? x[Symbol.for("^")](y) : x ^ y;
+})();`
     },
     {
       description: 'should transpile bitwise or assignment',
       operation: 'x |= y',
       expectation: `"use strict";
 
-x = function (_left, _right) {
+x = (() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("|")]) return _left[Symbol.for("|")](_right);else return _left | _right;
-}(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("|")] ? x[Symbol.for("|")](y) : x | y;
+})();`
     },
     {
       description: 'should transpile equal to comparison',
       operation: 'x == y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("==")]) return _left[Symbol.for("==")](_right);else return _left == _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("==")] ? x[Symbol.for("==")](y) : x == y;
+})();`
     },
     {
       description: 'should transpile not equal to comparison',
       operation: 'x != y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("!=")]) return _left[Symbol.for("!=")](_right);else return _left != _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("!=")] ? x[Symbol.for("!=")](y) : x != y;
+})();`
     },
     {
       description: 'should transpile less than comparison',
       operation: 'x < y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("<")]) return _left[Symbol.for("<")](_right);else return _left < _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("<")] ? x[Symbol.for("<")](y) : x < y;
+})();`
     },
     {
       description: 'should transpile less than or equal to comparison',
       operation: 'x <= y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("<=")]) return _left[Symbol.for("<=")](_right);else return _left <= _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("<=")] ? x[Symbol.for("<=")](y) : x <= y;
+})();`
     },
     {
       description: 'should transpile greater than comparison',
       operation: 'x > y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for(">")]) return _left[Symbol.for(">")](_right);else return _left > _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for(">")] ? x[Symbol.for(">")](y) : x > y;
+})();`
     },
     {
       description: 'should transpile greater than or equal to comparison',
       operation: 'x >= y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for(">=")]) return _left[Symbol.for(">=")](_right);else return _left >= _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for(">=")] ? x[Symbol.for(">=")](y) : x >= y;
+})();`
     },
     {
       description: 'should not transpile equal and same type comparison',
@@ -227,103 +227,205 @@ x === y;`
 x === y;`
     },
     {
-      description: 'should transpile greater than or equal to comparison',
-      operation: 'x >= y',
-      expectation: `"use strict";
-
-(function (_left, _right) {
-  'babel-operator-overload-plugin disabled';
-
-  if (_left !== null && _left !== undefined && _left[Symbol.for(">=")]) return _left[Symbol.for(">=")](_right);else return _left >= _right;
-})(x, y);`
-    },
-    {
       description: 'should transpile addition',
       operation: 'x + y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("+")]) return _left[Symbol.for("+")](_right);else return _left + _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("+")] ? x[Symbol.for("+")](y) : x + y;
+})();`
     },
     {
       description: 'should transpile subtraction',
       operation: 'x - y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("-")]) return _left[Symbol.for("-")](_right);else return _left - _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("-")] ? x[Symbol.for("-")](y) : x - y;
+})();`
     },
     {
       description: 'should transpile multiplication',
       operation: 'x * y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("*")]) return _left[Symbol.for("*")](_right);else return _left * _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("*")] ? x[Symbol.for("*")](y) : x * y;
+})();`
     },
     {
       description: 'should transpile division',
       operation: 'x / y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("/")]) return _left[Symbol.for("/")](_right);else return _left / _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("/")] ? x[Symbol.for("/")](y) : x / y;
+})();`
     },
     {
       description: 'should transpile remainder',
       operation: 'x % y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("%")]) return _left[Symbol.for("%")](_right);else return _left % _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("%")] ? x[Symbol.for("%")](y) : x % y;
+})();`
     },
     {
       description: 'should transpile exponent',
       operation: 'x ** y',
       expectation: `"use strict";
 
-(function (_left, _right) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_left !== null && _left !== undefined && _left[Symbol.for("**")]) return _left[Symbol.for("**")](_right);else return _left ** _right;
-})(x, y);`
+  return x !== undefined && x !== null && x[Symbol.for("**")] ? x[Symbol.for("**")](y) : x ** y;
+})();`
     },
     {
       description: 'should pre-increment',
       operation: '++x',
       expectation: `"use strict";
 
-x = function (_arg) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_arg !== null && _arg !== undefined && _arg[Symbol.for("prefix-increment")]) return _arg[Symbol.for("prefix-increment")]();else return ++_arg;
-}(x);`
+  return x !== undefined && x !== null && typeof x === 'object' && x[Symbol.for("prefix-increment")] ? x[Symbol.for("prefix-increment")]() : ++x;
+})();`
+    },
+    {
+      description: 'should pre-decrement',
+      operation: '--x',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && typeof x === 'object' && x[Symbol.for("prefix-decrement")] ? x[Symbol.for("prefix-decrement")]() : --x;
+})();`
     },
     {
       description: 'should post-increment',
       operation: 'x++',
       expectation: `"use strict";
 
-x = function (_arg) {
+(() => {
   'babel-operator-overload-plugin disabled';
 
-  if (_arg !== null && _arg !== undefined && _arg[Symbol.for("prefix-increment")]) return _arg[Symbol.for("prefix-increment")]();else return ++_arg;
-}(x);`
+  return x !== undefined && x !== null && typeof x === 'object' && x[Symbol.for("postfix-increment")] ? x[Symbol.for("postfix-increment")]() : x++;
+})();`
+    },
+    {
+      description: 'should post-decrement',
+      operation: 'x--',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && typeof x === 'object' && x[Symbol.for("postfix-decrement")] ? x[Symbol.for("postfix-decrement")]() : x--;
+})();`
+    },
+    {
+      description: 'should transpile bitwise and',
+      operation: 'x & y',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for("&")] ? x[Symbol.for("&")](y) : x & y;
+})();`
+    },
+    {
+      description: 'should transpile bitwise or',
+      operation: 'x | y',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for("|")] ? x[Symbol.for("|")](y) : x | y;
+})();`
+    },
+    {
+      description: 'should transpile bitwise xor',
+      operation: 'x ^ y',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for("^")] ? x[Symbol.for("^")](y) : x ^ y;
+})();`
+    },
+    {
+      description: 'should transpile bitwise not',
+      operation: '~x',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for("function Symbol() { [native code] }")] ? x[Symbol.for("~")]() : ~x;
+})();`
+    },
+    {
+      description: 'should transpile let shift',
+      operation: 'x << y',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for("<<")] ? x[Symbol.for("<<")](y) : x << y;
+})();`
+    },
+    {
+      description: 'should transpile sign propagating right shift',
+      operation: 'x >> y',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for(">>")] ? x[Symbol.for(">>")](y) : x >> y;
+})();`
+    },
+    {
+      description: 'should transpile zero fill right shift',
+      operation: 'x >>> y',
+      expectation: `"use strict";
+
+(() => {
+  'babel-operator-overload-plugin disabled';
+
+  return x !== undefined && x !== null && x[Symbol.for(">>>")] ? x[Symbol.for(">>>")](y) : x >>> y;
+})();`
+    },
+    {
+      description: 'should transpile logical and',
+      operation: 'x && y',
+      expectation: `"use strict";
+
+x && y;`
+    },
+    {
+      description: 'should transpile logical or',
+      operation: 'x || y',
+      expectation: `"use strict";
+
+x || y;`
     },
 
   ]

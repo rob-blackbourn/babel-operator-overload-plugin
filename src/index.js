@@ -5,37 +5,50 @@ const OperatorOverloadDirectiveName = 'babel-operator-overload-plugin'
 
 function createBinaryTemplate(op) {
   return template(`
-      (function (LEFT_ARG, RIGHT_ARG) {
-        '${OperatorOverloadDirectiveName} disabled'
-        if (LEFT_ARG !== null && LEFT_ARG !== undefined
-             && LEFT_ARG[Symbol.for("${op}")])
-            return LEFT_ARG[Symbol.for("${op}")](RIGHT_ARG)
-        else return LEFT_ARG ${op} RIGHT_ARG
-      })
+      (
+        () => {
+          '${OperatorOverloadDirectiveName} disabled'
+          return LHS !== undefined && LHS !== null && LHS[Symbol.for("${op}")]
+            ? LHS[Symbol.for("${op}")](RHS)
+            : LHS ${op} RHS
+        }
+      )
   `)
 }
 
-function createUnaryTemplate(symbol, op, prefix) {
+function createUnaryTemplate(symbol, op) {
+  return template(`
+  (
+    () => {
+      '${OperatorOverloadDirectiveName} disabled'
+      return ARG !== undefined && ARG !== null && ARG[Symbol.for("${Symbol}")]
+        ? ARG[Symbol.for("${symbol}")]()
+        : ${op} ARG
+    }
+  )`)
+}
+
+function createUpdateTemplate(symbol, op, prefix) {
   if (prefix) {
     return template(`
-    (function (ARG) {
-      '${OperatorOverloadDirectiveName} disabled'
-      if (ARG !== null && ARG !== undefined
-           && ARG[Symbol.for("${symbol}")])
-          return ARG[Symbol.for("${symbol}")]()
-      else return ${op} ARG
-    })
-`)
+    (
+      () => {
+        '${OperatorOverloadDirectiveName} disabled'
+        return ARG !== undefined && ARG !== null && typeof ARG === 'object' && ARG[Symbol.for("${symbol}")]
+          ? ARG[Symbol.for("${symbol}")]()
+          : ${op} ARG
+      }
+    )`)
   } else {
     return template(`
-    (function (ARG) {
-      '${OperatorOverloadDirectiveName} disabled'
-      if (ARG !== null && ARG !== undefined
-           && ARG[Symbol.for("${symbol}")])
-          return ARG[Symbol.for("${symbol}")]()
-      else return ARG ${op}
-    })
-`)
+    (
+      () => {
+        '${OperatorOverloadDirectiveName} disabled'
+        return ARG !== undefined && ARG !== null && typeof ARG === 'object' && ARG[Symbol.for("${symbol}")]
+          ? ARG[Symbol.for("${symbol}")]()
+          : ARG ${op}
+      }
+    )`)
   }
 }
 
@@ -116,19 +129,22 @@ module.exports = function ({ types: t }) {
           return
         }
 
-        if (path.node.operator.endsWith('===')) {
+        if (path.node.operator.endsWith('===') || 
+            path.node.operator == '&&' ||
+            path.node.operator == '||' ||
+            path.node.operator == 'instanceof') {
           return
         }
 
         const expressionStatement = createBinaryTemplate(path.node.operator)({
-          LEFT_ARG: path.scope.generateUidIdentifier("left"),
-          RIGHT_ARG: path.scope.generateUidIdentifier("right"),
+          LHS: path.node.left,
+          RHS: path.node.right
         })
 
         path.replaceWith(
           t.callExpression(
             expressionStatement.expression,
-            [path.node.left, path.node.right]
+            []
           )
         )
       },
@@ -142,22 +158,17 @@ module.exports = function ({ types: t }) {
         const symbol = (path.node.prefix ? 'prefix-' : 'postfix-')
           + (path.node.operator == '++' ? 'increment' : 'decrement')
 
-        const expressionTemplate = createUnaryTemplate(symbol, path.node.operator, path.node.prefix)
+        const expressionTemplate = createUpdateTemplate(symbol, path.node.operator, path.node.prefix)
         const expressionStatement = expressionTemplate({
-            ARG: path.scope.generateUidIdentifier("arg"),
+            ARG: path.node.argument,
         })
 
-        const callExpression = t.callExpression(
-          expressionStatement.expression,
-          [path.node.argument]
-        )
-
-
         path.replaceWith(
-          t.assignmentExpression(
-            '=',
-            path.node.argument,
-            callExpression))
+          t.callExpression(
+            expressionStatement.expression,
+            []
+          )
+        )
       },
 
       UnaryExpression(path, state) {
@@ -166,19 +177,24 @@ module.exports = function ({ types: t }) {
           return
         }
 
+        if (path.node.operator == 'typeof' ||
+            path.node.operator == 'void') {
+          return
+        }
+
         const symbolOverrides = {'+': 'plus', '-': 'minus'}
         const symbol = path.node.operator in symbolOverrides
           ? symbolOverrides[path.node.operator]
           : path.node.operator
 
-        const expressionStatement = createUnaryTemplate(symbol, path.node.operator, true)({
-          ARG: path.scope.generateUidIdentifier("arg"),
+        const expressionStatement = createUnaryTemplate(symbol, path.node.operator)({
+          ARG: path.node.argument,
         })
 
         path.replaceWith(
           t.callExpression(
             expressionStatement.expression,
-            [path.node.argument]
+            []
           )
         )
       },
@@ -196,13 +212,13 @@ module.exports = function ({ types: t }) {
         const operator = path.node.operator.slice(0,path.node.operator.length - 1)
 
         const expressionStatement = createBinaryTemplate(operator)({
-          LEFT_ARG: path.scope.generateUidIdentifier("left"),
-          RIGHT_ARG: path.scope.generateUidIdentifier("right"),
+          LHS: path.node.left,
+          RHS: path.node.right
         })
 
         const callExpression = t.callExpression(
           expressionStatement.expression,
-          [path.node.left, path.node.right]
+          []
         )
 
         path.replaceWith(
