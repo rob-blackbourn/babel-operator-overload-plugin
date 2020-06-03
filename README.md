@@ -4,6 +4,9 @@ A Babel plugin for operator overloading.
 
 There is a trivial template project [here](https://github.com/rob-blackbourn/babel-operator-overload-plugin-example).
 
+This was based on an [idea](https://github.com/foxbenjaminfox/babel-plugin-overload)
+by [Benjamin Fox](https://github.com/foxbenjaminfox)
+
 ## Example
 
 The following code adds two integers and then two points.
@@ -20,7 +23,7 @@ class Point {
         this.y = y
     }
     
-    __add__(other) {
+    [Symbol.for('+')](other) {
         const x = this.x + other.x
         const y = this.y + other.y
         return new Point(x, y)
@@ -48,7 +51,8 @@ This is the first babel plugin I have written, so your mileage may vary.
 
 I would appreciate any help!
 
-28-May2020: Updated to babel 7.
+28-May-2020: Updated to babel 7.
+03-JUN-2020: Refactored to use a function wrapper to handle nulls. Moved to `Symbol.for`. Removed the requirement for shims.
 
 ## Usage
 
@@ -64,7 +68,7 @@ I would appreciate any help!
 ```
 3. Install the operator overload plugin:
 ```bash
-~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#2.0.0
+~/my-app$ npm install --save-dev https://github.com/rob-blackbourn/babel-operator-overload-plugin.git#3.0.0
 ```
 4. Create a `.babelrc` file:
 ```bash
@@ -73,7 +77,7 @@ I would appreciate any help!
     "presets": [
         "@babel/preset-env"
     ],
-    "plugins": ["babel-operator-overload-plugin"]
+    "plugins": ["module:babel-operator-overload-plugin"]
 }
 ^D
 ```
@@ -87,7 +91,7 @@ class Point {
         this.y = y
     }
     
-    __add__(other) {
+    [Symbol.for('+')](other) {
         const x = this.x + other.x
         const y = this.y + other.y
         return new Point(x, y)
@@ -108,14 +112,13 @@ Point { x: 7, y: 8 }
 
 ## Description
 
-The plugin uses the [operator-overload-polyfills](https://github.com/rob-blackbourn/operator-overload-polyfills) package to redirect operators to functions on the root object.
+The plugin wraps expressions in function calls. 
 
-For example the polyfill for addition is:
 ```javascript
-if (!Object.prototype.__add__) {
-  Object.prototype.__add__ = function (other) {
-    return this + other
-  }
+function(left, right) {
+    if (left !== undefined && left !== null && left[Symbol.for('+')]) {
+        return left[Symbol.for('+')](right)
+    }
 }
 ```
 
@@ -129,7 +132,7 @@ let c = a + b
 gets re-written as:
 ```javascript
 let a = 1, b = 2
-let c = a.__add__(b)
+let c = function(left,right) { if (left !== undefine && left !== null && left[Symbol.for('+')) { left[Symbol.for('+')](right)} else { left + right })(a, b)
 ```
 
 This allows the creation of custom overrides such as:
@@ -141,7 +144,7 @@ class Point {
         this.y = y
     }
     
-    __add__(other) {
+    [Symbol.For('+')](other) {
         const x = this.x + other.x
         const y = this.y + other.y
         return new Point(x, y)
@@ -161,7 +164,7 @@ a += 3
 gets re-written as:
 ```javascript
 let a = 1
-a = a.__add__(3)
+a = function(left,right) { if (left !== undefine && left !== null && left[Symbol.for('+')) { left[Symbol.for('+')](right)} else { left + right })(a, 3)
 ```
 
 ## Options
@@ -190,7 +193,7 @@ class Point {
         this.y = y
     }
     
-    __add__(other) {
+    [Symbol.for('+')](other) {
         const x = this.x + other.x
         const y = this.y + other.y
         return new Point(x, y)
@@ -200,37 +203,4 @@ class Point {
 
 ## Supported operations
 
-The following operators are supported
-
-### Binary operators
-
-Operator|Function
---------|--------
-`+`     | `__add__(other)`
-`-`     | `__sub__(other)`
-`*`     | `__mul__(other)`
-`/`     | `__div__(other)`
-`%`     | `__mod__(other)`
-`**`    | `__pow__(other)`
-`&`     | `__and__(other)`
-`|`     | `__or__(other)`
-`^`     | `__xor__(other)`
-`<<`    | `__lshift__(other)`
-`>>`    | `__rshift__(other, propogateRight=true)`
-`>>>`   | `__rshift__(other, propogateRight=false)`
-`<`     | `__lt__(other)`
-`<=`    | `__le__(other)`
-`>`     | `__gt__(other)`
-`>=`    | `__ge__(other)`
-`==`    | `__eq__(other)`
-`!=`    | `__ne__(other)`
-
-### Unary operators
-
-Operator|Function
---------|--------
-`+`     | `__plus__`
-`-`     | `__neg__`
-`++`    | `__incr__(prefix)`
-`--`    | `__decr__(prefix)`
-`~`     | `__not__`
+Binary and unary operators are supported.

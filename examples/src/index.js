@@ -7,13 +7,13 @@ class Point {
     this.y = y
   }
 
-  __add__(other) {
+  [Symbol.for('+')](other) {
     const x = this.x + other.x
     const y = this.y + other.y
     return new Point(x, y)
   }
 
-  __eq__(other) {
+  [Symbol.for('==')](other) {
     return this.x == other.x && this.y == other.y
   }
 
@@ -22,10 +22,10 @@ class Point {
   }
 }
 
-const x = 1.2
-const y = 3.4
-const z = x + y
-console.log(z)
+// const x = 1.2
+// const y = 3.4
+// const z = x + y
+// console.log(z)
 
 const p1 = new Point(5, 5)
 const p2 = new Point(2, 3)
@@ -38,3 +38,4 @@ p5 += p4
 console.log(p5)
 
 console.log(p3 == p5)
+

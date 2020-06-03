@@ -1,52 +1,31 @@
-function createCallableMemberExpression(t, name, obj, args) {
-  const expression =
-    t.callExpression(
-      t.memberExpression(
-        obj,
-        t.identifier(name),
-        false),
-      args)
-  return expression
-}
-
-function createCallableBinaryExpression(t, name, path) {
-  return createCallableMemberExpression(t, name, path.node.left, [path.node.right])
-}
-
-function createCallableUnaryExpression(t, name, path) {
-  return createCallableMemberExpression(t, name, path.node.left, [])
-}
-
-const BinaryOperatorMap = {
-  '+': function (t, path) { return createCallableBinaryExpression(t, '__add__', path) },
-  '-': function (t, path) { return createCallableBinaryExpression(t, '__sub__', path) },
-  '*': function (t, path) { return createCallableBinaryExpression(t, '__mul__', path) },
-  '/': function (t, path) { return createCallableBinaryExpression(t, '__div__', path) },
-  '%': function (t, path) { return createCallableBinaryExpression(t, '__mod__', path) },
-  '**': function (t, path) { return createCallableBinaryExpression(t, '__pow__', path) },
-  '&': function (t, path) { return createCallableBinaryExpression(t, '__and__', path) },
-  '|': function (t, path) { return createCallableBinaryExpression(t, '__or__', path) },
-  '^': function (t, path) { return createCallableBinaryExpression(t, '__xor__', path) },
-  '<<': function (t, path) { return createCallableBinaryExpression(t, '__lshift__', path) },
-  '>>': function (t, path) { return createCallableMemberExpression(t, '__rshift__', path.node.left, [path.node.right, true]) },
-  '>>>': function (t, path) { return createCallableMemberExpression(t, '__rshift__', path.node.left, [path.node.right, false]) },
-  '<': function (t, path) { return createCallableBinaryExpression(t, '__lt__', path) },
-  '<=': function (t, path) { return createCallableBinaryExpression(t, '__le__', path) },
-  '>': function (t, path) { return createCallableBinaryExpression(t, '__gt__', path) },
-  '>=': function (t, path) { return createCallableBinaryExpression(t, '__ge__', path) },
-  '==': function (t, path) { return createCallableBinaryExpression(t, '__eq__', path) },
-  '!=': function (t, path) { return createCallableBinaryExpression(t, '__ne__', path) },
-}
-
-const UnaryOperatorMap = {
-  '+': function (t, path) { return createCallableUnaryExpression(t, '__plus__', path) },
-  '-': function (t, path) { return createCallableUnaryExpression(t, '__neg__', path) },
-  '++': function (t, path) { return createCallableMemberExpression(t, '__incr__', path.node.left, [path.node.prefix]) },
-  '--': function (t, path) { return createCallableMemberExpression(t, '__decr__', path.node.left, [path.node.prefix]) },
-  '~': function (t, path) { return createCallableUnaryExpression(t, '__not__', path) },
-}
+const babelTemplate = require('@babel/template')
+const template = babelTemplate.default
 
 const OperatorOverloadDirectiveName = 'babel-operator-overload-plugin'
+
+function createBinaryTemplate(op) {
+  return template(`
+      (function (LEFT_ARG, RIGHT_ARG) {
+        '${OperatorOverloadDirectiveName} disabled'
+        if (LEFT_ARG !== null && LEFT_ARG !== undefined
+             && LEFT_ARG[Symbol.for("${op}")])
+            return LEFT_ARG[Symbol.for("${op}")](RIGHT_ARG)
+        else return LEFT_ARG ${op} RIGHT_ARG
+      })
+  `)
+}
+
+function createUnaryTemplate(op) {
+  return template(`
+      (function (ARG) {
+        '${OperatorOverloadDirectiveName} disabled'
+        if (ARG !== null && ARG !== undefined
+             && ARG[Symbol.for("${op}")])
+            return ARG[Symbol.for("${op}")]()
+        else return ${op}ARG
+      })
+  `)
+}
 
 function hasDirective(directives, name, values) {
   for (const directive of directives) {
@@ -90,10 +69,6 @@ module.exports = function ({ types: t }) {
               state.dynamicData[OperatorOverloadDirectiveName].directives.unshift(state.opts.enabled == undefined ? true : state.opts.enabled)
               break;
           }
-
-          if (state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
-            path.unshiftContainer('body', t.importDeclaration([], t.stringLiteral('operator-overload-polyfills')))
-          }
         },
         exit(path, state) {
           if (hasOverloadingDirective(path.node.directives) !== false) {
@@ -129,16 +104,17 @@ module.exports = function ({ types: t }) {
           return
         }
 
-        if (path.node.hasOwnProperty('_fromTemplate')) {
-          return
-        }
+        const expressionStatement = createBinaryTemplate(path.node.operator)({
+          LEFT_ARG: path.scope.generateUidIdentifier("left"),
+          RIGHT_ARG: path.scope.generateUidIdentifier("right"),
+        })
 
-        const factory = BinaryOperatorMap[path.node.operator]
-        if (!factory) {
-          return
-        }
-
-        path.replaceWith(factory(t, path))
+        path.replaceWith(
+          t.callExpression(
+            expressionStatement.expression,
+            [path.node.left, path.node.right]
+          )
+        )
       },
 
       UnaryExpression(path, state) {
@@ -147,16 +123,16 @@ module.exports = function ({ types: t }) {
           return
         }
 
-        if (path.node.hasOwnProperty('_fromTemplate')) {
-          return
-        }
+        const expressionStatement = createUnaryTemplate(path.node.operator)({
+          ARG: path.scope.generateUidIdentifier("arg"),
+        })
 
-        const factory = UnaryOperatorMap[path.node.operator]
-        if (!factory) {
-          return
-        }
-
-        path.replaceWith(factory(t, path))
+        path.replaceWith(
+          t.callExpression(
+            expressionStatement.expression,
+            [path.node.argument]
+          )
+        )
       },
 
       AssignmentExpression(path, state) {
@@ -173,15 +149,13 @@ module.exports = function ({ types: t }) {
           return
         }
 
-        const name = path.node.operator.slice(0, path.node.operator.length - 1)
-        const factory = BinaryOperatorMap[name]
-        if (!factory) {
-          return
-        }
+        const expressionStatement = createBinaryTemplate(path.node.operator)({
+          LEFT_ARG: path.scope.generateUidIdentifier("left"),
+          RIGHT_ARG: path.scope.generateUidIdentifier("right"),
+        })
+        const expression = expressionStatement.expression
 
-        const binaryExpression = factory(t, path)
-
-        path.replaceWith(t.assignmentExpression('=', path.node.left, binaryExpression))
+        path.replaceWith(t.assignmentExpression('=', path.node.left, expression))
       }
     }
   }
