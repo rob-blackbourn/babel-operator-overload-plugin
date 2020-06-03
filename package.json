@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node examples/bin/dev",
     "start-prod": "npm run build && node examples/bin/prod",
-    "build": "babel examples/src --source-maps --out-dir examples/dist"
+    "build": "babel examples/src --source-maps --out-dir examples/dist",
+    "test": "mocha --require @babel/register"
   },
   "repository": {
     "type": "git",
@@ -24,12 +25,12 @@
     "url": "https://github.com/rob-blackbourn/babel-operator-overload-plugin/issues"
   },
   "homepage": "https://github.com/rob-blackbourn/babel-operator-overload-plugin#readme",
-  "dependencies": {
-    "@babel/core": "^7.10.0",
-    "@babel/template": "^7.10.1"
-  },
   "devDependencies": {
     "@babel/cli": "^7.10.0",
-    "@babel/preset-env": "^7.10.0"
+    "@babel/core": "^7.10.0",
+    "@babel/preset-env": "^7.10.0",
+    "@babel/register": "^7.10.1",
+    "@babel/template": "^7.10.1",
+    "mocha": "^7.2.0"
   }
 }

@@ -15,16 +15,28 @@ function createBinaryTemplate(op) {
   `)
 }
 
-function createUnaryTemplate(op) {
-  return template(`
-      (function (ARG) {
-        '${OperatorOverloadDirectiveName} disabled'
-        if (ARG !== null && ARG !== undefined
-             && ARG[Symbol.for("${op}")])
-            return ARG[Symbol.for("${op}")]()
-        else return ${op}ARG
-      })
-  `)
+function createUnaryTemplate(symbol, op, prefix) {
+  if (prefix) {
+    return template(`
+    (function (ARG) {
+      '${OperatorOverloadDirectiveName} disabled'
+      if (ARG !== null && ARG !== undefined
+           && ARG[Symbol.for("${symbol}")])
+          return ARG[Symbol.for("${symbol}")]()
+      else return ${op} ARG
+    })
+`)
+  } else {
+    return template(`
+    (function (ARG) {
+      '${OperatorOverloadDirectiveName} disabled'
+      if (ARG !== null && ARG !== undefined
+           && ARG[Symbol.for("${symbol}")])
+          return ARG[Symbol.for("${symbol}")]()
+      else return ARG ${op}
+    })
+`)
+  }
 }
 
 function hasDirective(directives, name, values) {
@@ -117,13 +129,39 @@ module.exports = function ({ types: t }) {
         )
       },
 
+      UpdateExpression(path, state) {
+
+        if (!state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
+          return
+        }
+
+        const symbol = (path.node.prefix ? 'prefix-' : 'postfix-')
+          + (path.node.operator == '++' ? 'increment' : 'decrement')
+
+        const expressionTemplate = createUnaryTemplate(symbol, path.node.operator, path.node.prefix)
+        const expressionStatement = expressionTemplate({
+            ARG: path.scope.generateUidIdentifier("arg"),
+        })
+
+        path.replaceWith(
+          t.assignmentExpression(
+            '=',
+            path.node.argument,
+            expressionStatement.expression))
+      },
+
       UnaryExpression(path, state) {
 
         if (!state.dynamicData[OperatorOverloadDirectiveName].directives[0]) {
           return
         }
 
-        const expressionStatement = createUnaryTemplate(path.node.operator)({
+        const symbolOverrides = {'+': 'plus', '-': 'minus'}
+        const symbol = path.node.operator in symbolOverrides
+          ? symbolOverrides[path.node.operator]
+          : path.node.operator
+
+        const expressionStatement = createUnaryTemplate(symbol, path.node.operator, true)({
           ARG: path.scope.generateUidIdentifier("arg"),
         })
 
@@ -153,9 +191,12 @@ module.exports = function ({ types: t }) {
           LEFT_ARG: path.scope.generateUidIdentifier("left"),
           RIGHT_ARG: path.scope.generateUidIdentifier("right"),
         })
-        const expression = expressionStatement.expression
 
-        path.replaceWith(t.assignmentExpression('=', path.node.left, expression))
+        path.replaceWith(
+          t.assignmentExpression(
+            '=',
+            path.node.left,
+            expressionStatement.expression))
       }
     }
   }
