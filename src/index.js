@@ -179,24 +179,27 @@ module.exports = function ({ types: t }) {
           return
         }
 
-        if (path.node.hasOwnProperty('_fromTemplate')) {
-          return
-        }
-
         if (path.node.operator === "=") {
           return
         }
 
-        const expressionStatement = createBinaryTemplate(path.node.operator)({
+        const operator = path.node.operator.slice(0,path.node.operator.length - 1)
+
+        const expressionStatement = createBinaryTemplate(operator)({
           LEFT_ARG: path.scope.generateUidIdentifier("left"),
           RIGHT_ARG: path.scope.generateUidIdentifier("right"),
         })
+
+        const callExpression = t.callExpression(
+          expressionStatement.expression,
+          [path.node.left, path.node.right]
+        )
 
         path.replaceWith(
           t.assignmentExpression(
             '=',
             path.node.left,
-            expressionStatement.expression))
+            callExpression))
       }
     }
   }

@@ -2,11 +2,12 @@
 
 
 let j1 = 1
+j1 += 2
 // console.log(++j1)
 // console.log(j1++)
 // console.log(+j1)
 // console.log(-j1)
-console.log(typeof j1)
+// console.log(typeof j1)
 // console.log(j1)
 
 // const x = 1.2

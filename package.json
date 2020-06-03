@@ -1,5 +1,5 @@
 {
-  "name": "babel-operator-overload-plugin",
+  "name": "@jetblack/operator-overloading",
   "version": "3.0.0",
   "description": "A babel plugin for operator overloading",
   "main": "src/index.js",
