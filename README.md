@@ -1,5 +1,7 @@
 # babel-operator-overload-plugin
 
+**Edit**: There is a more recent version of this project in [jetblack-operator-overloading](https://github.com/rob-blackbourn/jetblack-operator-overloading).
+
 A Babel plugin for operator overloading.
 
 There is a trivial template project [here](https://github.com/rob-blackbourn/babel-operator-overload-plugin-example).
